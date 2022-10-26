@@ -96,15 +96,20 @@ def add_namaz(upd: Updater, handlers_group: int):
 
 
 def _plural(x):
-    lastTwoDigits = x % 100
-    tens = lastTwoDigits // 10
+    last_two_digits = x % 100
+    tens = last_two_digits // 10
+
     if tens == 1:
         return 2
-    ones = lastTwoDigits % 10
+
+    ones = last_two_digits % 10
+
     if ones == 1:
         return 0
+
     if ones >= 2 and ones <= 4:
         return 1
+
     return 2
 
 
