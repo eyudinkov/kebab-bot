@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Bot",
+            "type": "python",
+            "request": "launch",
+            "program": "bot/main.py",
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": "Run Bot Environment"
+        },
+    ]
+}

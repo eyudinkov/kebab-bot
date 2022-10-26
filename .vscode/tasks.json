@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Bot Environment",
+            "type": "docker-compose",
+            "dockerCompose": {
+                "up": {
+                    "detached": true,
+                    "build": true,
+                    "services": [
+                        "mongo"
+                    ]
+                },
+                "files": [
+                    "${workspaceFolder}/docker-compose-dev.yml"
+                ]
+            }
+        }
+    ]
+}

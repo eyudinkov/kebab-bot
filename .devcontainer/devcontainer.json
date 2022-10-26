@@ -1,0 +1,54 @@
+{
+	"name": "Python 3",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "..",
+		"args": { 
+			"VARIANT": "3.9",
+			"NODE_VERSION": "lts/*"
+		}
+	},
+
+	"remoteEnv": {
+		"PATH": "/home/vscode/.local/bin:${containerEnv:PATH}"
+	},
+
+	"mounts": [
+		"source=profile,target=/root,type=volume",
+		"target=/root/.vscode-server,type=volume"
+	],
+
+	"settings": { 
+		"python.defaultInterpreterPath": "/usr/local/bin/python",
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": true,
+		"python.formatting.blackPath": "/usr/local/bin/black",
+		"python.linting.flake8Path": "/usr/local/bin/flake8",
+		"python.linting.mypyPath": "/usr/local/bin/mypy",
+		"python.linting.pycodestylePath": "/usr/local/bin/pycodestyle",
+		"python.linting.pylintPath": "/usr/local/bin/pylint"
+	},
+
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"mutantdino.resourcemonitor",
+		"VisualStudioExptTeam.vscodeintellicode",
+		"KevinRose.vsc-python-indent",
+		"njpwerner.autodocstring",
+		"yzhang.markdown-all-in-one"
+	],
+
+	"postCreateCommand": "",
+
+	"remoteUser": "vscode",
+	"features": {
+		"git": "latest",
+		"github-cli": "latest",
+		"sshd": "latest",
+		"docker-in-docker": {
+			"version": "latest",
+			"moby": true,
+		},
+	}
+}

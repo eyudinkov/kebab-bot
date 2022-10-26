@@ -1,0 +1,33 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[[description]]
+name = "kebab-bot"
+version = "0.0.1"
+description = "Kebab bot"
+
+[dev-packages]
+flake8 = ">3"
+pylint = "==3.0.0-a4"
+pytest = ">6"
+mypy = "0.790"
+ptvsd = "4.3.2"
+black = ">21"
+
+[packages]
+beautifulsoup4 = "==4.11.1"
+cloudscraper = "==1.2.64"
+python-telegram-bot = "==13.7"
+pymongo = "==3.11.4"
+grpcio = "==1.47.0"
+sentry-sdk = ">0.19"
+Pillow = "9.0.0"
+toml = ">0.10"
+
+[requires]
+python_version = "3.9"
+
+[pipenv]
+allow_prereleases = true

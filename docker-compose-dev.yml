@@ -1,0 +1,36 @@
+version: "3.1"
+
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: ./compose/dev/Dockerfile
+    ports:
+      - "5678:5678"
+    volumes:
+      - .:/app
+      - .:/opt/gcloud
+    depends_on:
+      - mongo
+    env_file:
+      - ./.env
+    environment:
+      - PYTHONPATH=./bot
+      - TZ=Europe/Moscow
+    logging:
+      options:
+        max-size: "1M"
+        max-file: "10"
+
+  mongo:
+    image: mongo:4.2.15
+    environment:
+      - TZ=Europe/Moscow
+    ports:
+      - "27017:27017"
+    env_file:
+      - ./.env
+    logging:
+      options:
+        max-size: "1M"
+        max-file: "10"
