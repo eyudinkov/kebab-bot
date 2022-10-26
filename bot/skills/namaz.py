@@ -1,4 +1,3 @@
-from email import message
 import logging
 import cloudscraper
 
@@ -90,10 +89,28 @@ def add_namaz(upd: Updater, handlers_group: int):
 
     upd.job_queue.run_repeating(
         update_notifications,
-        interval=30,
+        interval=10,
         first=30,
         context={"chat_id": get_config()["GROUP_CHAT_ID"]},
     )
+
+
+def _plural(x):
+    lastTwoDigits = x % 100
+    tens = lastTwoDigits // 10
+    if tens == 1:
+        return 2
+    ones = lastTwoDigits % 10
+    if ones == 1:
+        return 0
+    if ones >= 2 and ones <= 4:
+        return 1
+    return 2
+
+
+def _show_plural(value, list):
+    suffix = list[_plural(value)]
+    return "{0} {1}".format(value, suffix)
 
 
 def _nearest(items, pivot, alternative_date=None):
@@ -249,11 +266,14 @@ def _get_namaz():
     logger.debug("get delta: %s", delta)
 
     if isinstance(delta, timedelta):
-        hours, minutes, seconds = str(
+        h, m, s = str(
             timedelta(seconds=delta.seconds)).split(":")
+        hours = _show_plural(int(h), ["час", "часа", "часов"])
+        minutes = _show_plural(int(m), ["минута", "минуты", "минут"])
+        seconds = _show_plural(int(s), ["секунда", "секунды", "секунд"])
 
         if hours:
-            return f"До следующего намаза осталось: {hours} часов {minutes} минут {seconds} секунд"
+            return f"До следующего намаза осталось: {hours} {minutes} {seconds}"
         else:
             return "Не получилось получить время намаза 😥"
 
