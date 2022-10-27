@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.error import BadRequest
 from telegram.ext import Updater, CommandHandler, CallbackContext
 
-from filters import admin_filter
+from filters import trusted_filter
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ def add_kebab(upd: Updater, handlers_group: int):
         CommandHandler(
             "kebab",
             kebab,
-            filters=admin_filter,
+            filters=trusted_filter,
             run_async=True,
         ),
         handlers_group,

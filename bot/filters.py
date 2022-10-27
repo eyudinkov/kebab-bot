@@ -22,8 +22,6 @@ _trusted_db = TrustedDB("trusted")
 
 
 class TrustedFilter(MessageFilter):
-    """Messages only from trusted users"""
-
     name = "Filter.trusted"
 
     def filter(self, message: Message) -> Optional[Union[bool, DataDict]]:
@@ -33,8 +31,6 @@ class TrustedFilter(MessageFilter):
 
 
 class AdminFilter(MessageFilter):
-    """Messages only from admins"""
-
     name = "Filters.admin"
 
     def filter(self, message) -> bool:
@@ -45,21 +41,8 @@ class AdminFilter(MessageFilter):
         }
 
 
-class UwuFilter(MessageFilter):
-    """Regexp check for UwU"""
-
-    name = "Filters.uwu"
-
-    def filter(self, message) -> bool:
-        if message.text:
-            return bool(re.search(r"\bu[wv]+u\b", message.text, re.IGNORECASE))
-
-        return False
-
 
 class OnlyAdminOnOthersFilter(MessageFilter):
-    """Messages only from admins with reply"""
-
     name = "Filters.onlyAdminOnOthers"
 
     def filter(self, message: Message) -> bool:
@@ -74,6 +57,5 @@ class OnlyAdminOnOthersFilter(MessageFilter):
 
 
 admin_filter = AdminFilter()
-uwu_filter = UwuFilter()
 only_admin_on_others = OnlyAdminOnOthersFilter()
 trusted_filter = TrustedFilter()
