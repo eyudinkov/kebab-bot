@@ -12,7 +12,7 @@ from telegram.ext import (
 )
 from telegram.ext.dispatcher import DEFAULT_GROUP
 
-from filters import trusted_filter
+from filters import trusted_filter, admin_filter
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,7 @@ class Mode:
             CommandHandler(
                 f"{self.name}_on",
                 self._mode_on,
-                filters=trusted_filter,
+                filters=trusted_filter | admin_filter,
                 run_async=True,
             ),
             self.handlers_gr,
@@ -73,7 +73,7 @@ class Mode:
             CommandHandler(
                 f"{self.name}_off",
                 self._mode_off,
-                filters=trusted_filter,
+                filters=trusted_filter | admin_filter,
                 run_async=True,
             ),
             self.handlers_gr,

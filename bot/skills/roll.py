@@ -176,7 +176,7 @@ def _shot(context: CallbackContext) -> Tuple[bool, int]:
     return fate, shots_remained
 
 
-def _get_username(h: Dict) -> str:
+def get_username(h: Dict) -> str:
     m = h["meta"]
     username = m.get("username")
     fname = m.get("first_name")
@@ -262,7 +262,7 @@ def show_leaders(update: Update, context: CallbackContext):
     leaders_length = len(leaders)
 
     for leader in leaders:
-        username = _get_username(leader)
+        username = get_username(leader)
         board += (
             f"{str(timedelta(seconds=(leader['total_time_in_club']))).ljust(18)} "
             f"| {str(leader['shot_counter']).ljust(8)} "
@@ -323,7 +323,7 @@ def show_active(update: Update, context: CallbackContext):
         message = "Лидеры ☠️:\n"
 
         for leader in restricted:
-            message += f"{choice(HONORED_EMOJIS)} {_get_username(leader)} \n"
+            message += f"{choice(HONORED_EMOJIS)} {get_username(leader)} \n"
 
     result = context.bot.send_message(update.effective_chat.id, message)
 

@@ -6,7 +6,7 @@ from telegram.ext import Updater, CommandHandler, CallbackContext
 
 from mode import cleanup_queue_update
 
-from skills.roll import _get_username
+from skills.roll import get_username
 
 from db.mongo import get_db
 import pymongo
@@ -95,7 +95,7 @@ def _longest(update: Update, context: CallbackContext):
     n = 1
 
     for col in _db.get_best_n(10):
-        username = _get_username(col)
+        username = get_username(col)
         message += f"{n} → {username}\n"
 
         n += 1
