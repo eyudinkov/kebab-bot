@@ -118,7 +118,6 @@ def add_roll(upd: Updater, handlers_group: int):
         CommandHandler(
             "top",
             show_active,
-            filters=admin_filter,
             run_async=True,
         ),
         handlers_group,

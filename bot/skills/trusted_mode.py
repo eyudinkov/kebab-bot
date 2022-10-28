@@ -65,7 +65,7 @@ def add_trusted_mode(upd: Updater, handlers_group: int):
     )
 
 
-def _get_user_and_admin(update) -> (str, str, str):
+def _get_user_and_admin(update):
     user: User = update.message.reply_to_message.from_user
     admin: User = update.effective_user
     chat_id = update.effective_chat.id
@@ -77,10 +77,10 @@ def trust_callback(update: Update, context: CallbackContext):
 
     if user and admin and chat_id:
         if _db.get_user(user.id) is not None:
-            msg = f"{user.name} уже кебаб 👍"
+            msg = f"{user.name} уже настоящий кебаб 👍"
         else:
             _db.trust(user.id, admin.id)
-            msg = f"{user.name} пффуф теперь ты кебаб! 🍢"
+            msg = f"🪄 {user.name} теперь ты настоящий кебаб!"
 
         context.bot.send_message(chat_id, msg)
 
