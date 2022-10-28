@@ -119,7 +119,6 @@ def trusted_list(update: Updater, context: CallbackContext):
 
     if len(list(users)) > 0:
         message = "Список настоящих кебабов:\n"
-
         for user in _db.get_all_users():
             message += f"{choice(HONORED_EMOJIS)} {get_username(user)} \n"
 
