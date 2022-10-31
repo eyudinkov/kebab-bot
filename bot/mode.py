@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 ON, OFF = True, False
 
+
 class Mode:
     _dp: Dispatcher
     _mode_handlers: List[CommandHandler] = []

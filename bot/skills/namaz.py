@@ -89,7 +89,7 @@ def add_namaz(upd: Updater, handlers_group: int):
 
     upd.job_queue.run_repeating(
         update_notifications,
-        interval=10,
+        interval=1,
         first=30,
         context={"chat_id": get_config()["GROUP_CHAT_ID"]},
     )
@@ -98,11 +98,10 @@ def add_namaz(upd: Updater, handlers_group: int):
 def _plural(x):
     last_two_digits = x % 100
     tens = last_two_digits // 10
+    ones = last_two_digits % 10
 
     if tens == 1:
         return 2
-
-    ones = last_two_digits % 10
 
     if ones == 1:
         return 0
@@ -200,11 +199,7 @@ def update_notifications(context: CallbackContext):
             if next_pray_time.seconds <= 300:
                 if notified is False:
                     message: Optional[Message] = context.bot.send_message(
-                        chat_id, f"⚠️ !!! Внимание !!! ⚠️ \n\nВ течение 5 минут ожидается намаз ")
-
-                    context.bot.pin_chat_message(
-                        chat_id, message.message_id, disable_notification=None
-                    )
+                        chat_id, f"⚠️ !!! Внимание !!! ⚠️ \n\nЧерез 5 минут ожидается намаз")
 
                     db.update_notified(id, True)
 
@@ -213,8 +208,6 @@ def update_notifications(context: CallbackContext):
                         None,
                         message,
                         300,
-                        remove_cmd=True,
-                        remove_reply=False,
                     )
             else:
                 db.update_notified(id, False)
