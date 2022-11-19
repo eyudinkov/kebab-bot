@@ -7,17 +7,11 @@ from pymongo import MongoClient
 from pymongo.collection import Collection
 from telegram.ext import Updater, CommandHandler, CallbackContext
 
-
-from config import get_config
 from mode import Mode
+from db.mongo import get_db
 
-conf = get_config()
-
-client = MongoClient(f"mongodb://{conf['MONGO_USER']}:{conf['MONGO_PASS']}@mongo:27017")
-topics_coll: Collection = client.since_mode.topics
-
+topics_coll: Collection = get_db('since_mode').topics
 logger = logging.getLogger(__name__)
-
 mode = Mode(mode_name="since_mode", default=True, pin_info_msg=False)
 
 

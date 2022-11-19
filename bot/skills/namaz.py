@@ -261,7 +261,7 @@ def _get_namaz():
 
     delta = _get_next_pray_delta()
 
-    logger.debug("get delta: %s", delta)
+    logger.info("get delta: %s", delta)
 
     if isinstance(delta, timedelta):
         h, m, s = str(
