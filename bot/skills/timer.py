@@ -3,7 +3,8 @@ from telegram import Update
 from telegram.error import BadRequest
 from telegram.ext import Updater, CommandHandler, CallbackContext
 from typing import List
-from time import sleep
+
+SEC_IN_MINUTE = 60
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +29,6 @@ def timer(update: Update, context: CallbackContext):
 
 		return
 
-	SEC_IN_MINUTE = 60
 	send_text = "Стрелочка вращается, запустил таймер на {} мин".format(minutes)
 
 	context.bot.send_message(update.effective_chat.id, send_text)
