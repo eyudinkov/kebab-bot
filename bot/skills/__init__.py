@@ -20,6 +20,7 @@ from skills.still import add_still
 from skills.towel_mode import add_towel_mode
 from skills.trusted_mode import add_trusted_mode
 from skills.namaz import add_namaz
+from skills.timer import add_timer
 
 logger = logging.getLogger(__name__)
 
@@ -83,6 +84,7 @@ skills: List[Dict] = [
     _make_skill(add_smile_mode, "🍢 smile mode", " только стикеры и картинки"),
     _make_skill(add_since_mode, "🛠 since mode", " в разработке"),
     _make_skill(add_towel_mode, "🧼 towel mode", " anti kebab"),
+    _make_skill(add_timer, 'timer', " тик-так")
 ]
 
 commands_list: List[Tuple[str, str]] = [
@@ -103,7 +105,8 @@ commands_list: List[Tuple[str, str]] = [
     ("wipe_me", "👩🏻‍🦼 стереть всю свою историю"),
     ("length", "узнать свой размер 🍆"),
     ("longest", "узнать самый длинный 🍆"),
-    ("namaz", "получить время намаза 🙏")
+    ("namaz", "получить время намаза 🙏"),
+    ("timer", "запустить таймер")
 ]
 
 
