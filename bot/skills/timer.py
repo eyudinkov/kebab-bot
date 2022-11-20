@@ -1,6 +1,4 @@
 import logging
-from datetime import datetime
-
 from telegram import Update
 from telegram.error import BadRequest
 from telegram.ext import Updater, CommandHandler, CallbackContext
@@ -34,6 +32,8 @@ def timer(update: Update, context: CallbackContext):
 	send_text = "Стрелочка вращается, запустил таймер на {} мин".format(minutes)
 
 	context.bot.send_message(update.effective_chat.id, send_text)
-	sleep(minutes * SEC_IN_MINUTE)
-	context.bot.send_message(update.effective_chat.id, "Стрелочка вернулась на место")
+	context.job_queue.run_once(
+    	lambda _: context.bot.send_message(update.effective_chat.id, "Стрелочка вернулась на место"),
+    	SEC_IN_MINUTE * minutes
+    );
 
