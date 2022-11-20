@@ -3,7 +3,6 @@ from datetime import datetime
 from functools import reduce
 from typing import Dict, List
 
-from pymongo import MongoClient
 from pymongo.collection import Collection
 from telegram.ext import Updater, CommandHandler, CallbackContext
 
