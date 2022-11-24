@@ -33,12 +33,14 @@ def alarm(context: CallbackContext):
 
 
 def timer(update: Update, context: CallbackContext):
+    cmd: Optional[Message] = None
+
     try:
+        cmd = update.message
         minutes = int(" ".join(context.args))
         message: Optional[Message] = update.message.reply_text(
             f"Стрелочка вращается, запустил таймер на {minutes} мин", disable_notification=False
         )
-        cmd = update.message
 
         context.job_queue.run_once(
             alarm,
