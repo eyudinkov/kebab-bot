@@ -22,7 +22,7 @@ from skills.trusted_mode import add_trusted_mode
 from skills.namaz import add_namaz
 from skills.timer import add_timer
 from skills.paradise_mode import add_paradise_mode
-from skills.kek import add_kek_mode
+from skills.kek_mode import add_kek_mode
 
 logger = logging.getLogger(__name__)
 
