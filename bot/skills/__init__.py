@@ -21,6 +21,8 @@ from skills.towel_mode import add_towel_mode
 from skills.trusted_mode import add_trusted_mode
 from skills.namaz import add_namaz
 from skills.timer import add_timer
+from skills.paradise_mode import add_paradise_mode
+from skills.kek import add_kek_mode
 
 logger = logging.getLogger(__name__)
 
@@ -83,6 +85,8 @@ skills: List[Dict] = [
     _make_skill(add_trusted_mode, "🍢 список доверенных кебабов", " настоящий ли ты кебаб?"),
     _make_skill(add_smile_mode, "🍢 smile mode", " только стикеры и картинки"),
     _make_skill(add_since_mode, "🛠 since mode", " в разработке"),
+    _make_skill(add_paradise_mode, "🌈 paradise mode", " еще один день в раю"),
+    _make_skill(add_kek_mode, "🤪 kek mode", " kek?"),
     _make_skill(add_towel_mode, "🧼 towel mode", " anti kebab"),
     _make_skill(add_timer, 'timer', " тик-так")
 ]

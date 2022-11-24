@@ -1,11 +1,17 @@
 import os
 from typing import Dict, Optional
 
+
 def get_debug() -> bool:
     return os.getenv("DEBUG", "False").lower() == "true"
 
+
 def get_debugger() -> Optional[str]:
     return os.getenv("DEBUGGER", "")
+
+
+def get_project_id() -> Optional[str]:
+    return os.getenv("GOOGLE_PROJECT_ID", "")
 
 
 def get_group_chat_id() -> Optional[str]:
@@ -13,6 +19,7 @@ def get_group_chat_id() -> Optional[str]:
     if chat_id is None:
         raise ValueError("can't get CHAT_ID")
     return chat_id
+
 
 def get_token() -> Optional[str]:
     token = os.getenv("TOKEN", None)
@@ -43,6 +50,7 @@ def get_config() -> Dict:
         "GROUP_CHAT_ID": get_group_chat_id(),
         "MONGO_USER": get_mongo_user(),
         "MONGO_PASS": get_mongo_pass(),
+        "GOOGLE_PROJECT_ID": get_project_id(),
         "MONGO_HOST": os.getenv("MONGO_HOST", "mongo"),
         "MONGO_PORT": os.getenv("MONGO_PORT", "27017"),
         "SENTRY_DSN": os.getenv("SENTRY_DSN", None),
