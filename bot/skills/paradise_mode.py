@@ -14,7 +14,9 @@ mode = Mode(mode_name="paradise_mode", default=OFF, pin_info_msg=True)
 @mode.add
 def add_paradise_mode(upd: Updater, handlers_group: int):
     logger.info("registering paradise-mode handlers")
+
     dp = upd.dispatcher
+
     dp.add_handler(
         MessageHandler(~Filters.status_update, paradise, run_async=True),
         handlers_group,
@@ -24,6 +26,7 @@ def add_paradise_mode(upd: Updater, handlers_group: int):
 def paradise(update: Update, context: CallbackContext):
     text = update.message["text"]
     chat_id = update.effective_chat.id
+
     try:
         context.bot.delete_message(chat_id, update.effective_message.message_id)
     except BadRequest as err:
@@ -31,5 +34,5 @@ def paradise(update: Update, context: CallbackContext):
 
     if text:
         context.bot.send_message(
-            chat_id, f"{text}\n\nУра, еще один день в раю!"
+            chat_id, f"{text}\n\n🌈 Ура, еще один день в раю! 🌈"
         )
