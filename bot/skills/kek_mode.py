@@ -40,7 +40,7 @@ def kek(update: Update, context: CallbackContext):
         logger.info("can't delete msg: %s", err)
 
     number = sum([ord(c) for c in user.full_name])
-    languages = ["ro", "uk", "sr", "sk", "sl", "uz", "bg", "mn", "kk"]
+    languages = ["ro", "uk", "sr", "sk", "sl", "uz", "bg", "mn", "zh-CN", "kk", "no", "ja"]
     language = languages[number % len(languages)]
     emoji = chr(ord("😀") + number % 75)
 
