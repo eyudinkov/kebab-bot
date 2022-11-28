@@ -23,6 +23,7 @@ from skills.namaz import add_namaz
 from skills.timer import add_timer
 from skills.paradise_mode import add_paradise_mode
 from skills.kek_mode import add_kek_mode
+from skills.profanity_mode import add_profanity_mode
 
 logger = logging.getLogger(__name__)
 
@@ -87,6 +88,7 @@ skills: List[Dict] = [
     _make_skill(add_since_mode, "🛠 since mode", " в разработке"),
     _make_skill(add_paradise_mode, "🌈 paradise mode", " еще один день в раю"),
     _make_skill(add_kek_mode, "🤪 kek mode", " kek?"),
+    _make_skill(add_profanity_mode, "🔨 не ругайся!", " поаккуратнее с языком молодой человек"),
     _make_skill(add_towel_mode, "🧼 towel mode", " anti kebab"),
     _make_skill(add_timer, 'timer', " тик-так")
 ]
