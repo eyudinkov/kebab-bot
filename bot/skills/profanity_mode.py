@@ -185,5 +185,5 @@ def profanity(update: Update, context: CallbackContext):
             logger.info("can't delete msg: %s", err)
 
         context.bot.send_message(
-            chat_id, f"{user.full_name} написал нехорошие слова. Измененное сообщение: {filter.mask_bad_words(text)}\n\nУра, еще один день в раю!"
+            chat_id, f"{user.full_name} написал(а) нехорошие слова.\n\nИзмененное сообщение:\n{filter.mask_bad_words(text)}\n\nУра, еще один день в раю!"
         )
