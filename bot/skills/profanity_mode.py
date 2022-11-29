@@ -80,7 +80,7 @@ def _build_neutral_phrase(*symbols):
 def _create_profanity_re():
     return re.compile('|'.join([
         _build_profanity_phrase('п еи з д'),
-        _build_profanity_phrase('х у йёуяию'),
+        _build_profanity_phrase('х у йёуяиюе'),
         _build_profanity_phrase('о х у е втл'),
         _build_profanity_phrase('п и д оеа р'),
         _build_profanity_phrase('п и д р'),
@@ -96,11 +96,14 @@ def _create_profanity_re():
         _build_profanity_phrase('г ао н д о н'),
         _build_profanity_phrase('ч м оы'),
         _build_profanity_phrase('д е р ь м'),
+        _build_profanity_phrase('ж о п'),
         _build_profanity_phrase('ш л ю х'),
         _build_profanity_phrase('з ао л у п'),
         _build_profanity_phrase('м ао н д'),
         _build_profanity_phrase('с у ч а р'),
         _build_profanity_phrase('д ао л б ао её б'),
+        _build_profanity_phrase('оа б оа с а тц'),
+        _build_profanity_phrase('д р оа ч'),
     ]), re.IGNORECASE | re.UNICODE)
 
 
