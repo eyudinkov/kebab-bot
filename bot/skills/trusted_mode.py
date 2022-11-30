@@ -11,11 +11,13 @@ from db.mongo import get_db
 from filters import admin_filter
 from mode import Mode, ON, cleanup_queue_update
 
-from skills.roll import HONORED_EMOJIS, get_username
+from skills.roll import get_username
 
 logger = logging.getLogger(__name__)
 
 mode = Mode(mode_name="trusted_mode", default=ON)
+
+HONORED_EMOJIS = ["🦷", "🤡", "🤖", "👾", "🤠", "🤐", "🥶", "🥷", "🦄", "🐗", "🐈"]
 
 
 class DB:
@@ -119,7 +121,7 @@ def trusted_list(update: Updater, context: CallbackContext):
 
     if len(list(users)) > 0:
         message = "Список настоящих кебабов:\n"
-        
+
         for user in _db.get_all_users():
             message += f"{choice(HONORED_EMOJIS)} {get_username(user)} \n"
 
