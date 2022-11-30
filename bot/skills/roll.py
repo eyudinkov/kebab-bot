@@ -1,7 +1,7 @@
 import logging
 import os
 from datetime import datetime, timedelta
-from random import randint, choice
+from random import randint
 from tempfile import gettempdir
 from threading import Lock
 from typing import List, Optional, Tuple, Dict
@@ -23,12 +23,10 @@ from skills.mute import mute_user_for_time
 
 logger = logging.getLogger(__name__)
 
-MUTE_MINUTES = 16 * 60  # 16h
+MUTE_MINUTES = 16 * 60
 NUM_BULLETS = 6
 LIMIT_FOR_IMAGE = 25
 FONT = "firacode.ttf"
-
-HONORED_EMOJIS = ["🦷", "🤡", "🤖", "👾", "🤠", "🤐", "🥶", "🥷", "🦄", "🐗", "🐈"]
 
 
 class DB:
@@ -208,8 +206,8 @@ def _create_empty_image(image_path, limit):
     try:
         image.save(image_path, JPEG)
         logger.info("Empty image saved")
-    except (ValueError, OSError) as ex:
-        logger.error("Error during image saving, error: %s", ex)
+    except (ValueError, OSError) as err:
+        logger.error("Error during image saving, error: %s", err)
         return None
     return image
 
@@ -227,8 +225,8 @@ def _add_text_to_image(text, image_path):
     try:
         image.save(image_path, JPEG)
         logger.info("Image with text saved")
-    except (ValueError, OSError) as ex:
-        logger.error("Error during image with text saving, error: %s", ex)
+    except (ValueError, OSError) as err:
+        logger.error("Error during image with text saving, error: %s", err)
         os.remove(image_path)
         return None
     return image
@@ -273,8 +271,8 @@ def show_leaders(update: Update, context: CallbackContext):
     board += f"{''.rjust(51, '-')}"
     try:
         board_image, board_image_path = from_text_to_image(board, leaders_length)
-    except (ValueError, RuntimeError, OSError) as ex:
-        logger.error("Cannot get image from text, leaders error: %s", ex)
+    except (ValueError, RuntimeError, OSError) as err:
+        logger.error("Cannot get image from text, leaders error: %s", err)
         return
 
     result: Optional[Message] = None
@@ -312,18 +310,24 @@ def show_active(update: Update, context: CallbackContext):
     restricted = []
 
     for leader in leaders:
-        chat_member = context.bot.get_chat_member(
-            update.effective_chat.id, leader.get("_id")
-        )
+        try:
+            chat_member = context.bot.get_chat_member(
+                update.effective_chat.id, leader.get("_id")
+            )
+            if chat_member.status == ChatMember.RESTRICTED:
+                restricted.append(leader)
 
-        if chat_member.status == ChatMember.RESTRICTED:
-            restricted.append(leader)
+        except Exception as err:
+            logger.error("Error while getting the user: %s", err)
 
     if len(restricted) > 0:
         message = "Лидеры ☠️:\n"
 
         for leader in restricted:
-            message += f"{choice(HONORED_EMOJIS)} {get_username(leader)} \n"
+            name = get_username(leader)
+            number = sum([ord(c) for c in name])
+            emoji = chr(ord("😀") + number % 75)
+            message += f"{emoji} {name} \n"
 
     result = context.bot.send_message(update.effective_chat.id, message)
 
