@@ -15,6 +15,7 @@ from pymongo.collection import Collection
 from telegram import Update, User, Message, ChatMember
 from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContext
 from telegram.ext.filters import Filters
+from telegram.error import BadRequest
 
 from db.mongo import get_db
 from filters import admin_filter
@@ -317,8 +318,8 @@ def show_active(update: Update, context: CallbackContext):
             if chat_member.status == ChatMember.RESTRICTED:
                 restricted.append(leader)
 
-        except Exception as err:
-            logger.error("Error while getting the user: %s", err)
+        except BadRequest:
+            logger.error("can't get user %s, skip", leader)
 
     if len(restricted) > 0:
         message = "Лидеры ☠️:\n"
