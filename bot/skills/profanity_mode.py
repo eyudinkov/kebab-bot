@@ -6,11 +6,11 @@ from telegram import Update, User
 from telegram.error import BadRequest, TelegramError
 from telegram.ext import MessageHandler, Filters, Updater, CallbackContext
 
-from mode import Mode, ON
+from mode import Mode, OFF
 
 logger = logging.getLogger(__name__)
 
-mode = Mode(mode_name="profanity_mode", default=ON, pin_info_msg=True)
+mode = Mode(mode_name="profanity_mode", default=OFF, pin_info_msg=True)
 
 
 def _variants_of_letter(alphabet, letter):
@@ -142,17 +142,16 @@ class ObsceneWordsFilter(object):
     def is_word_good(self, word):
         return bool(self.good_regexp.match(word))
 
-    def is_word_bad(self, word):
-        if self.is_word_good(word):
-            return False
-
-        return bool(self.bad_regexp.match(word))
-
     def mask_bad_words(self, text):
         for match in self.find_bad_word_matches_without_good_words(text):
             start, end = match.span()
             text = self.mask_text_range(text, start, end)
         return text
+
+    def is_sequence_contains_bad_words(text):
+        generator = filter.find_bad_word_matches_without_good_words(text)
+        words = list(map(lambda x: x.group(0), list(generator)))
+        return len(words) > 0
 
     @staticmethod
     def mask_text_range(text, start, stop, symbol='*'):
@@ -178,10 +177,8 @@ def profanity(update: Update, context: CallbackContext):
     text = update.message["text"]
     user: User = update.effective_user
     chat_id = update.effective_chat.id
-    generator = filter.find_bad_word_matches(text)
-    words = list(map(lambda x: x.group(0), list(generator)))
 
-    if len(words) > 0:
+    if filter.is_sequence_contains_bad_words(text) is True:
         try:
             context.bot.delete_message(chat_id, update.effective_message.message_id)
         except (BadRequest, TelegramError) as err:
