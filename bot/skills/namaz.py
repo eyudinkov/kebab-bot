@@ -1,5 +1,6 @@
 import logging
 import cloudscraper
+import math
 
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -20,7 +21,7 @@ update_delta = timedelta(minutes=10)
 
 
 def _get_now():
-    return datetime.now()
+    return datetime().now()
 
 
 class DB:
@@ -213,7 +214,7 @@ def update_notifications(context: CallbackContext):
 
         message_id = db.find_times(id)["message_id"]
         start_minute = db.find_times(id)["start_minute"]
-        current_minute = str(int(next_pray_time.seconds / 60))
+        current_minute = str(math.ceil(next_pray_time.seconds / 60))
 
         time = _show_time(next_pray_time, False)
         text = f"⚠️ !!! Внимание !!! ⚠️ \n\nЧерез {time} ожидается намаз"
