@@ -21,7 +21,7 @@ update_delta = timedelta(minutes=10)
 
 
 def _get_now():
-    return datetime().now()
+    return datetime.now()
 
 
 class DB:
