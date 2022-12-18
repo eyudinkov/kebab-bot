@@ -16,6 +16,7 @@ from typing import List, Dict, Optional
 
 logger = logging.getLogger(__name__)
 scraper = cloudscraper.create_scraper()
+update_delta = timedelta(minutes=10)
 
 
 def _get_now():
@@ -33,7 +34,8 @@ class DB:
                     "_id": id,
                     "today": [],
                     "tomorrow": [],
-                    "notified": False,
+                    "message_id": None,
+                    "start_minute": None,
                 }
             )
             if self.find_times(id) is None
@@ -46,9 +48,14 @@ class DB:
     def find_all_times(self):
         return self._coll.find({})
 
-    def update_notified(self, id: str, notified: bool):
+    def update_message_id(self, id: str, message_id: str):
         self._coll.update_one(
-            {"_id": id}, {"$set": {"notified": notified}}
+            {"_id": id}, {"$set": {"message_id": message_id}}
+        )
+
+    def update_start_minute(self, id: str, minute: str):
+        self._coll.update_one(
+            {"_id": id}, {"$set": {"start_minute": minute}}
         )
 
     def add_times_rel(self, id: str, today: List[str], tomorrow: List[str]):
@@ -186,6 +193,16 @@ def update_datas(context: CallbackContext):
         _parse_page()
 
 
+def _remove_message(context: CallbackContext):
+    message = context.job.context["message"]
+    id = context.job.context["id"]
+
+    db.update_message_id(id, None)
+    db.update_start_minute(id, None)
+
+    message.delete()
+
+
 def update_notifications(context: CallbackContext):
     chat_id = context.bot.get_chat(chat_id=context.job.context["chat_id"]).id
     times = db.find_all_times()
@@ -193,24 +210,35 @@ def update_notifications(context: CallbackContext):
     if len(list(times)) > 0:
         next_pray_time = _get_next_pray_delta()
         id = str(_get_date_strs()[0])
-        notified = db.find_times(id)["notified"]
+
+        message_id = db.find_times(id)["message_id"]
+        start_minute = db.find_times(id)["start_minute"]
+        current_minute = str(int(next_pray_time.seconds / 60))
+
+        time = _show_time(next_pray_time, False)
+        text = f"⚠️ !!! Внимание !!! ⚠️ \n\nЧерез {time} ожидается намаз"
 
         if isinstance(next_pray_time, timedelta):
-            if next_pray_time.seconds <= 300:
-                if notified is False:
-                    message: Optional[Message] = context.bot.send_message(
-                        chat_id, f"⚠️ !!! Внимание !!! ⚠️ \n\nЧерез 5 минут ожидается намаз")
+            if next_pray_time.seconds <= update_delta.seconds:
+                if message_id is None:
+                    message: Optional[Message] = context.bot.send_message(chat_id, text)
 
-                    db.update_notified(id, True)
+                    db.update_message_id(id, message.message_id)
+                    db.update_start_minute(id, current_minute)
 
-                    cleanup_queue_update(
-                        context.job_queue,
-                        None,
-                        message,
-                        300,
+                    context.job_queue.run_once(
+                        _remove_message,
+                        next_pray_time.seconds,
+                        context={
+                            "message": message,
+                            "id": id,
+                        }
                     )
-            else:
-                db.update_notified(id, False)
+                elif start_minute != current_minute:
+                    message_id_after_update = db.find_times(id)["message_id"]
+                    if message_id_after_update is not None:
+                        context.bot.edit_message_text(text, chat_id, message_id=message_id_after_update)
+                        db.update_start_minute(id, current_minute)
 
 
 def namaz(update: Update, context: CallbackContext):
@@ -257,6 +285,16 @@ def _get_next_pray_delta():
         return err
 
 
+def _show_time(delta: timedelta, show_seconds_and_hours: bool = True):
+    h, m, s = str(
+        timedelta(seconds=delta.seconds)).split(":")
+    hours = _show_plural(int(h), ["час", "часа", "часов"])
+    minutes = _show_plural(int(m), ["минута", "минуты", "минут"])
+    seconds = _show_plural(int(s), ["секунда", "секунды", "секунд"])
+
+    return show_seconds_and_hours and f"{hours} {minutes} {seconds}" or f"{minutes}"
+
+
 def _get_namaz():
 
     delta = _get_next_pray_delta()
@@ -264,14 +302,10 @@ def _get_namaz():
     logger.info("get delta: %s", delta)
 
     if isinstance(delta, timedelta):
-        h, m, s = str(
-            timedelta(seconds=delta.seconds)).split(":")
-        hours = _show_plural(int(h), ["час", "часа", "часов"])
-        minutes = _show_plural(int(m), ["минута", "минуты", "минут"])
-        seconds = _show_plural(int(s), ["секунда", "секунды", "секунд"])
+        time = _show_time(delta)
 
-        if hours:
-            return f"До следующего намаза осталось: {hours} {minutes} {seconds}"
+        if time:
+            return f"До следующего намаза осталось: {time}"
         else:
             return "Не получилось получить время намаза 😥"
 
