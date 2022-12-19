@@ -217,7 +217,7 @@ def update_notifications(context: CallbackContext):
         current_minute = str(math.ceil(next_pray_time.seconds / 60))
 
         time = _show_time(next_pray_time, False)
-        text = f"⚠️ !!! Внимание !!! ⚠️ \nДо намаза осталось {time}"
+        text = f"⚠️ !!! Внимание !!! ⚠️ \n\nДо намаза осталось {time}"
 
         if isinstance(next_pray_time, timedelta):
             if next_pray_time.seconds <= update_delta.seconds:
