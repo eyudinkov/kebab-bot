@@ -214,10 +214,11 @@ def update_notifications(context: CallbackContext):
 
         message_id = db.find_times(id)["message_id"]
         start_minute = db.find_times(id)["start_minute"]
-        current_minute = str(math.ceil(next_pray_time.seconds / 60))
 
         time = _show_time(next_pray_time, False)
-        text = f"⚠️ !!! Внимание !!! ⚠️ \n\nДо намаза осталось {time}"
+        current_minute = str(math.ceil(next_pray_time.seconds / 60))
+
+        text = f"⚠️ !!! Внимание !!! ⚠️ \n\nДо намаза осталось: {time}"
 
         if isinstance(next_pray_time, timedelta):
             if next_pray_time.seconds <= update_delta.seconds:
@@ -235,9 +236,9 @@ def update_notifications(context: CallbackContext):
                             "id": id,
                         }
                     )
-                elif start_minute != current_minute:
+                elif start_minute != current_minute and current_minute != '0':
                     message_id_after_update = db.find_times(id)["message_id"]
-                    if message_id_after_update is not None and current_minute != '0':
+                    if message_id_after_update is not None:
                         context.bot.edit_message_text(text, chat_id, message_id=message_id_after_update)
                         db.update_start_minute(id, current_minute)
 
