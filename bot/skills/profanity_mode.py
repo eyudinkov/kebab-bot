@@ -148,7 +148,7 @@ class ObsceneWordsFilter(object):
             text = self.mask_text_range(text, start, end)
         return text
 
-    def is_sequence_contains_bad_words(text):
+    def is_sequence_contains_bad_words(self, text):
         generator = filter.find_bad_word_matches_without_good_words(text)
         words = list(map(lambda x: x.group(0), list(generator)))
         return len(words) > 0
